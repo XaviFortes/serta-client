@@ -8,6 +8,7 @@ package meteordevelopment.meteorclient.systems.friends;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.System;
 import meteordevelopment.meteorclient.systems.Systems;
+import meteordevelopment.meteorclient.utils.network.MeteorExecutor;
 import meteordevelopment.meteorclient.utils.render.color.RainbowColors;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import net.minecraft.entity.player.PlayerEntity;
@@ -77,16 +78,6 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
         return false;
     }
 
-    public Friend get(String name) {
-        for (Friend friend : friends) {
-            if (friend.name.equals(name)) {
-                return friend;
-            }
-        }
-
-        return null;
-    }
-
     public Friend get(UUID uuid) {
         for (Friend friend : friends) {
             if (friend.id.equals(uuid)) {
@@ -138,9 +129,12 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
 
         for (NbtElement friendTag : friendList) {
             NbtCompound compound = (NbtCompound) friendTag;
-            if (!compound.contains("id") || !compound.contains("name")) continue;
+            if (!compound.contains("id")) continue;
 
-            friends.add(new Friend(compound));
+            MeteorExecutor.execute(() -> {
+                Friend friend = new Friend(compound);
+                if (friend.updateName()) friends.add(friend);
+            });
         }
 
         settings.fromTag(tag.getCompound("settings"));
