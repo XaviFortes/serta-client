@@ -267,7 +267,7 @@ public class KillAura extends Module {
             return;
         }
 
-        if (pauseOnCombat.get() && BaritoneAPI.getProvider().getPrimaryBaritone().getPathingBehavior().isPathing() && !wasPathing) {
+        if (pauseOnCombat.get() && !wasPathing) {
             BaritoneAPI.getProvider().getPrimaryBaritone().getCommandManager().execute("pause");
             wasPathing = true;
         }
