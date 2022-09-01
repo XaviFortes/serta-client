@@ -24,7 +24,7 @@ function send(version, number) {
         if (hasChanges) description += changes;
 
         if (success) {
-            description += "\n\n**Download:** [serta-client-" + version + "-" + number + "](https://meteorclient.com/download?devBuild=" + number + ")";
+            description += "\n\n**Download:** [serta-client-" + version + "-" + number + "](https://github.com/XaviFortes/serta-client/actions/runs/" + process.env.GITHUB_RUN_ID + "/serta-client-" + version + ".jar)";
         }
 
         const webhook = {
@@ -32,9 +32,9 @@ function send(version, number) {
             avatar_url: "https://meteorclient.com/icon.png",
             embeds: [
                 {
-                    title: "meteor client v" + version + " build #" + number,
+                    title: "serta client v" + version + " build #" + number,
                     description: description,
-                    url: "https://meteorclient.com",
+                    url: "https://github.com/XaviFortes/serta-client/actions/runs/" + process.env.GITHUB_RUN_ID,
                         color: success ? 2672680 : 13117480
                 }
             ]
@@ -44,6 +44,7 @@ function send(version, number) {
     });
 }
 
+/*
 if (success) {
     let jar = "";
     fs.readdirSync("../../build/libs").forEach(file => {
@@ -67,3 +68,4 @@ else {
         send(res.data.dev_build_version, parseInt(res.data.devBuild) + 1)
     });
 }
+*/
