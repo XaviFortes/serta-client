@@ -18,13 +18,13 @@ function send(version, number) {
         for (let i in res.data.commits) {
             let commit = res.data.commits[i];
 
-            changes += "\n- [`" + commit.sha.substring(0, 7) + "`](https://github.com/MeteorDevelopment/meteor-client/commit/" + commit.sha + ") *" + commit.commit.message + "*";
+            changes += "\n- [`" + commit.sha.substring(0, 7) + "`](https://github.com/XaviFortes/serta-client/commit/" + commit.sha + ") *" + commit.commit.message + "*";
             hasChanges = true;
         }
         if (hasChanges) description += changes;
 
         if (success) {
-            description += "\n\n**Download:** [meteor-client-" + version + "-" + number + "](https://meteorclient.com/download?devBuild=" + number + ")";
+            description += "\n\n**Download:** [serta-client-" + version + "-" + number + "](https://meteorclient.com/download?devBuild=" + number + ")";
         }
 
         const webhook = {

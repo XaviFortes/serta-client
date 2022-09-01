@@ -41,6 +41,18 @@ public class BlockUtils {
         MeteorClient.EVENT_BUS.subscribe(BlockUtils.class);
     }
 
+    // Block
+
+    public static Block getBlock(BlockPos p) {
+        if (p == null) return null;
+        return mc.world.getBlockState(p).getBlock();
+    }
+
+    public static BlockState getBlockState(BlockPos pos) {
+        if (pos == null) return null;
+        return mc.world.getBlockState(pos);
+    }
+
     // Placing
 
     public static boolean place(BlockPos blockPos, FindItemResult findItemResult, int rotationPriority) {
