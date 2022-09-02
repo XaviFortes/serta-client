@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "Serta Client",
   "id": "meteor-client",
-  "version": "${version}",
+  "version": "0.0.3",
   "description": "Based utility mod.",
   "authors": [
     "XaviFortes",

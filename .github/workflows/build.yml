@@ -79,6 +79,7 @@ jobs:
           name: beta v${{ steps.get_version.outputs.version }}-${{ steps.dev-build.outputs.number }}
           tag: ${{ steps.get_version.outputs.version }}
           prerelease: false
+          allowUpdates: true
           body: |
             [Changelog](https://github.com/XaviFortes/serta-client/compare/${{ github.event.before }}...${{ github.event.after }})
 
