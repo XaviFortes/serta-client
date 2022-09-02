@@ -22,9 +22,9 @@ body:
     validations:
       required: true
   - type: input
-    id: meteor-version
+    id: serta-version
     attributes:
-      label: Meteor Version
+      label: Serta Version
     validations:
       required: true
   - type: input

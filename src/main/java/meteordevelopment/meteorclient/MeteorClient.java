@@ -70,7 +70,7 @@ public class MeteorClient implements ClientModInitializer {
             return;
         }
 
-        LOG.info("Initializing Meteor Client");
+        LOG.info("Initializing Serta Client");
 
         // Global minecraft client accessor
         mc = MinecraftClient.getInstance();

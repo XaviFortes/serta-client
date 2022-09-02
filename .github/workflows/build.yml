@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: serta-client-
-          path: build/libs/serta-client-*.jar
+          path: build/libs/serta-client-*[0-9].jar
 
         
 
