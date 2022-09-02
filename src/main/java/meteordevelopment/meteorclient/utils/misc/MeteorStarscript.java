@@ -202,14 +202,16 @@ public class MeteorStarscript {
             return null;
         }
     }
+
+    public static Section runSection(Script script) {
+        return runSection(script, new StringBuilder());
+    }
+
     public static String run(Script script, StringBuilder sb) {
         Section section = runSection(script, sb);
         return section != null ? section.toString() : null;
     }
 
-    public static Section runSection(Script script) {
-        return runSection(script, new StringBuilder());
-    }
     public static String run(Script script) {
         return run(script, new StringBuilder());
     }

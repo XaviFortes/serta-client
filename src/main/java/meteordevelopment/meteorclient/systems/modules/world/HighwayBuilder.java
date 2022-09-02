@@ -357,17 +357,17 @@ public class HighwayBuilder extends Module {
 
     private int getWidthLeft() {
         return switch (width.get()) {
-            default -> 0;
             case 2, 3 -> 1;
             case 4, 5 -> 2;
+            default -> 0;
         };
     }
 
     private int getWidthRight() {
         return switch (width.get()) {
-            default -> 0;
             case 3, 4 -> 1;
             case 5 -> 2;
+            default -> 0;
         };
     }
 
@@ -1167,9 +1167,9 @@ public class HighwayBuilder extends Module {
 
                     return switch (i) {
                         case -1 -> pos;
-                        default -> pos.offset(dir.opposite());
                         case 1 -> pos.offset(leftDir);
                         case 2 -> pos.offset(rightDir);
+                        default -> pos.offset(dir.opposite());
                     };
                 }
 
@@ -1460,9 +1460,9 @@ public class HighwayBuilder extends Module {
 
                     return switch (i) {
                         case -1 -> pos;
-                        default -> pos.offset(dir2);
                         case 1 -> pos.offset(dir2.rotateLeftSkipOne());
                         case 2 -> pos.offset(dir2.rotateLeftSkipOne().opposite());
+                        default -> pos.offset(dir2);
                     };
                 }
 

@@ -102,6 +102,11 @@ public class Modules extends System<Modules> {
         super.load(folder);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends Module> T get(Class<T> klass) {
+        return (T) moduleInstances.get(klass);
+    }
+
     public void sortModules() {
         for (List<Module> modules : groups.values()) {
             modules.sort(Comparator.comparing(o -> o.title));
@@ -125,11 +130,6 @@ public class Modules extends System<Modules> {
         }
 
         return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Module> T get(Class<T> klass) {
-        return (T) moduleInstances.get(klass);
     }
 
     public Module get(String name) {
@@ -622,12 +622,6 @@ public class Modules extends System<Modules> {
             return false;
         }
 
-        @Nullable
-        @Override
-        public Module get(int index) {
-            return null;
-        }
-
         @Override
         public Iterator<Module> iterator() {
             return new ModuleIterator();
@@ -721,6 +715,12 @@ public class Modules extends System<Modules> {
         @Override
         public void populateTags(Map<TagKey<Module>, List<RegistryEntry<Module>>> tagEntries) {
 
+        }
+
+        @Nullable
+        @Override
+        public Module get(int index) {
+            return null;
         }
 
         private static class ModuleIterator implements Iterator<Module> {

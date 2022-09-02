@@ -712,6 +712,13 @@ public class CrystalAura extends Module {
         return damage;
     }
 
+    private boolean isValidWeaknessItem(ItemStack itemStack) {
+        if (!(itemStack.getItem() instanceof ToolItem) || itemStack.getItem() instanceof HoeItem) return false;
+
+        ToolMaterial material = ((ToolItem) itemStack.getItem()).getMaterial();
+        return material == ToolMaterials.DIAMOND || material == ToolMaterials.NETHERITE;
+    }
+
     private void doBreak(Entity crystal) {
         // Anti weakness
         if (antiWeakness.get()) {
@@ -763,13 +770,6 @@ public class CrystalAura extends Module {
             breakRenderPos.set(crystal.getBlockPos().down());
             breakRenderTimer = renderBreakTime.get();
         }
-    }
-
-    private boolean isValidWeaknessItem(ItemStack itemStack) {
-        if (!(itemStack.getItem() instanceof ToolItem) || itemStack.getItem() instanceof HoeItem) return false;
-
-        ToolMaterial material = ((ToolItem) itemStack.getItem()).getMaterial();
-        return material == ToolMaterials.DIAMOND || material == ToolMaterials.NETHERITE;
     }
 
     private void attackCrystal(Entity entity) {

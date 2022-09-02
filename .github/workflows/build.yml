@@ -65,8 +65,6 @@ jobs:
           name: serta-client-
           path: build/libs/serta-client-*[0-9].jar
 
-        
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
