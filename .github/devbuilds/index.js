@@ -43,7 +43,6 @@ function send(version, number) {
         axios.post(process.env.DISCORD_WEBHOOK, webhook);
     });
 }
-
 /*
 if (success) {
     let jar = "";
