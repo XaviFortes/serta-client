@@ -1,5 +1,5 @@
 const axios = require("axios").default;
 
-axios.get("https://meteorclient.com/api/stats").then(res => {
-    console.log("::set-output name=number::" + (parseInt(res.data.devBuild) + 1));
+axios.get("https://api.github.com/repos/xavifortes/serta-client/releases/latest").then(res => {
+    console.log("::set-output name=number::" + (parseInt(res.data.tag_name) + 1));
 });

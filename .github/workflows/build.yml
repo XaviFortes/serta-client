@@ -52,6 +52,21 @@ jobs:
       #    MAVEN_METEOR_ALIAS: ${{ secrets.MAVEN_METEOR_ALIAS }}
       #    MAVEN_METEOR_TOKEN: ${{ secrets.MAVEN_METEOR_TOKEN }}
 
+      # Get version from gradle.properties and set as variable
+      - name: Get version
+        id: get_version
+        run: |
+          echo "::set-output name=version::$(cat gradle.properties | grep "mod_version=" | cut -d'=' -f2)"
+
+      # Upload artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: serta-client-
+          path: build/libs/serta-client-*.jar
+
+        
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -63,11 +78,11 @@ jobs:
         with:
           artifacts: build/libs/serta-client-*[0-9].jar
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ github.ref_name }}-${{ steps.dev-build.outputs.number }}
-          tag: ${{ github.ref_name }}-${{ steps.dev-build.outputs.number }}
-          prerelease: true
+          name: beta v${{ steps.get_version.outputs.version }}-${{ steps.dev-build.outputs.number }}
+          tag: ${{ steps.get_version.outputs.version }}
+          prerelease: false
           body: |
-            [Changelog](https://api.github.com/repos/XaviFortes/serta-client/compare/${{ github.event.before }}...${{ github.event.after }})
+            [Changelog](https://github.com/XaviFortes/serta-client/compare/${{ github.event.before }}...${{ github.event.after }})
 
       - name: Upload file & Discord webhook
         run: |

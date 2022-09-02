@@ -37,25 +37,25 @@ public class TitleScreenMixin extends Screen {
     private void onRenderIdkDude(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
         if (Utils.firstTimeTitleScreen) {
             Utils.firstTimeTitleScreen = false;
-            MeteorClient.LOG.info("Checking latest version of Meteor Client");
+            MeteorClient.LOG.info("Checking latest version of Serta Client");
 
             MeteorExecutor.execute(() -> {
-                String res = Http.get("https://meteorclient.com/api/stats").sendString();
+                String res = Http.get("https://api.github.com/repos/xavifortes/serta-client/releases/latest").sendString();
                 if (res == null) return;
 
-                Version latestVer = new Version(JsonParser.parseString(res).getAsJsonObject().get("version").getAsString());
+                Version latestVer = new Version(JsonParser.parseString(res).getAsJsonObject().get("tag_name").getAsString());
 
                 if (latestVer.isHigherThan(MeteorClient.VERSION)) {
                     YesNoPrompt.create()
                         .title("New Update")
-                        .message("A new version of Meteor has been released.")
+                        .message("A new version of Serta has been released.")
                         .message("Your version: %s", MeteorClient.VERSION)
                         .message("Latest version: %s", latestVer)
                         .message("Do you want to update?")
-                        .onYes(() -> Util.getOperatingSystem().open("https://meteorclient.com/"))
+                        .onYes(() -> Util.getOperatingSystem().open("https://github.com/XaviFortes/serta-client/releases"))
                         .onNo(() -> OkPrompt.create()
                             .title("Are you sure?")
-                            .message("Using old versions of Meteor is not recommended")
+                            .message("Using old versions of Serta is not recommended")
                             .message("and could report in issues.")
                             .id("new-update-no")
                             .onOk(this::close)
