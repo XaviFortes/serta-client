@@ -56,7 +56,18 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: serta-client-${{ github.sha }}
-          path: build/libs/serta-client*.jar
+          path: build/libs/serta-client-*.jar
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          artifacts: build/libs/serta-client-*[0-9].jar
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ github.ref_name }}-${{ steps.dev-build.outputs.number }}
+          tag: ${{ github.ref_name }}-${{ steps.dev-build.outputs.number }}
+          prerelease: true
+          body: |
+            [Changelog](https://api.github.com/repos/XaviFortes/serta-client/compare/${{ github.event.before }}...${{ github.event.after }})
 
       - name: Upload file & Discord webhook
         run: |
