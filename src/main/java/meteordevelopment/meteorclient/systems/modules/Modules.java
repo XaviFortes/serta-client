@@ -102,11 +102,6 @@ public class Modules extends System<Modules> {
         super.load(folder);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Module> T get(Class<T> klass) {
-        return (T) moduleInstances.get(klass);
-    }
-
     public void sortModules() {
         for (List<Module> modules : groups.values()) {
             modules.sort(Comparator.comparing(o -> o.title));
@@ -149,22 +144,27 @@ public class Modules extends System<Modules> {
         return groups.computeIfAbsent(category, category1 -> new ArrayList<>());
     }
 
-    public Collection<Module> getAll() {
-        return moduleInstances.values();
-    }
-
     public List<Module> getList() {
         return modules;
-    }
-
-    public int getCount() {
-        return moduleInstances.values().size();
     }
 
     public List<Module> getActive() {
         synchronized (active) {
             return active;
         }
+    }
+
+    public Collection<Module> getAll() {
+        return moduleInstances.values();
+    }
+
+    public int getCount() {
+        return moduleInstances.values().size();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Module> T get(Class<T> klass) {
+        return (T) moduleInstances.get(klass);
     }
 
     public Set<Module> searchTitles(String text) {

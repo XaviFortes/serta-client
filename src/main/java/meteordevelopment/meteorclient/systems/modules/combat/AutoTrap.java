@@ -233,6 +233,7 @@ public class AutoTrap extends Module {
                 add(targetPos.add(0, 0, 1));
             }
             case Single -> add(targetPos.add(0, -1, 0));
+            default -> throw new IllegalArgumentException("Unexpected value: " + bottomPlacement.get());
         }
     }
 
