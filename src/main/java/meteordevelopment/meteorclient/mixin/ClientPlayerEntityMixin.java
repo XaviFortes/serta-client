@@ -1,13 +1,12 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- * Copyright (c) 2021 Meteor Development.
+ * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
+ * Copyright (c) Meteor Development.
  */
 
 package meteordevelopment.meteorclient.mixin;
 
 import baritone.api.BaritoneAPI;
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.events.entity.DamageEvent;
@@ -17,7 +16,6 @@ import meteordevelopment.meteorclient.events.game.SendMessageEvent;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.config.Config;
 import meteordevelopment.meteorclient.systems.modules.Modules;
-import meteordevelopment.meteorclient.systems.modules.misc.ServerSpoof;
 import meteordevelopment.meteorclient.systems.modules.movement.NoSlow;
 import meteordevelopment.meteorclient.systems.modules.movement.Scaffold;
 import meteordevelopment.meteorclient.systems.modules.movement.Sneak;
@@ -31,12 +29,8 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.command.CommandSource;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.network.encryption.PlayerPublicKey;
-import net.minecraft.network.message.ArgumentSignatureDataMap;
-import net.minecraft.network.message.ChatMessageSigner;
-import net.minecraft.network.message.MessageSignature;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -52,13 +46,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
 
+    @Shadow
+    public abstract void sendChatMessage(String message, @Nullable Text preview);
+
     private boolean ignoreChatMessage;
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, profile, publicKey);
     }
-
-    @Shadow public abstract void sendChatMessage(String string);
 
     @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
     private void onDropSelectedItem(boolean dropEntireStack, CallbackInfoReturnable<Boolean> info) {
@@ -74,7 +69,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
             if (!event.isCancelled()) {
                 ignoreChatMessage = true;
-                sendChatMessage(event.message);
+                sendChatMessage(event.message, preview);
                 ignoreChatMessage = false;
             }
 
@@ -113,7 +108,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Inject(method = "shouldSlowDown", at = @At("HEAD"), cancellable = true)
     private void onShouldSlowDown(CallbackInfoReturnable<Boolean> info) {
         if (Modules.get().get(NoSlow.class).sneaking()) {
-            info.setReturnValue(shouldLeaveSwimmingPose());
+            info.setReturnValue(isCrawling());
         }
     }
 
@@ -128,18 +123,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Inject(method = "damage", at = @At("HEAD"))
     private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         if (Utils.canUpdate() && world.isClient && canTakeDamage()) MeteorClient.EVENT_BUS.post(DamageEvent.get(this, source));
-    }
-
-    // No Signatures
-
-    @Inject(method = "signChatMessage", at = @At("HEAD"), cancellable = true)
-    private void onSignChatMessage(ChatMessageSigner signer, Text message, CallbackInfoReturnable<MessageSignature> info) {
-        if (Modules.get().get(ServerSpoof.class).noSignatures()) info.setReturnValue(MessageSignature.none());
-    }
-
-    @Inject(method = "signArguments", at = @At("HEAD"), cancellable = true)
-    private void onSignArguments(ChatMessageSigner signer, ParseResults<CommandSource> parseResults, @Nullable Text preview, CallbackInfoReturnable<ArgumentSignatureDataMap> info) {
-        if (Modules.get().get(ServerSpoof.class).noSignatures()) info.setReturnValue(ArgumentSignatureDataMap.empty());
     }
 
     // Rotations

@@ -1,6 +1,6 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- * Copyright (c) 2021 Meteor Development.
+ * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
+ * Copyright (c) Meteor Development.
  */
 
 package meteordevelopment.meteorclient.systems.commands.commands;
@@ -22,10 +22,12 @@ public class FakePlayerCommand extends Command {
         super("fake-player", "Manages fake players that you can use for testing.");
     }
 
+    FakePlayer fakePlayer = Modules.get().get(FakePlayer.class);
+
     @Override
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         builder.then(literal("spawn").executes(context -> {
-            if (active()) FakePlayerManager.add("Meteor on Crack", 36, true);
+            if (active()) FakePlayerManager.add(fakePlayer.name.get(), 36, true);
             return SINGLE_SUCCESS;
         })
                  .then(argument("name", StringArgumentType.word())

@@ -1,6 +1,6 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- * Copyright (c) 2021 Meteor Development.
+ * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
+ * Copyright (c) Meteor Development.
  */
 
 package meteordevelopment.meteorclient.systems.commands.commands;
@@ -28,7 +28,7 @@ public class ResetCommand extends Command {
     @Override
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         builder.then(literal("settings")
-                .then(argument("module", ModuleArgumentType.module()).executes(context -> {
+                .then(argument("module", ModuleArgumentType.create()).executes(context -> {
                     Module module = context.getArgument("module", Module.class);
                     module.settings.forEach(group -> group.forEach(Setting::reset));
                     module.info("Reset all settings.");
@@ -44,7 +44,7 @@ public class ResetCommand extends Command {
             ChatUtils.info("Reset GUI positioning.");
             return SINGLE_SUCCESS;
         })).then(literal("bind")
-                .then(argument("module", ModuleArgumentType.module()).executes(context -> {
+                .then(argument("module", ModuleArgumentType.create()).executes(context -> {
                     Module module = context.getArgument("module", Module.class);
 
                     module.keybind.set(true, -1);

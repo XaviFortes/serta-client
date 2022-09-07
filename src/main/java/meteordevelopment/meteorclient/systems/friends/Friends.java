@@ -1,46 +1,26 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- * Copyright (c) 2021 Meteor Development.
+ * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
+ * Copyright (c) Meteor Development.
  */
 
 package meteordevelopment.meteorclient.systems.friends;
 
-import meteordevelopment.meteorclient.settings.*;
+import com.mojang.util.UUIDTypeAdapter;
 import meteordevelopment.meteorclient.systems.System;
 import meteordevelopment.meteorclient.systems.Systems;
-import meteordevelopment.meteorclient.utils.network.MeteorExecutor;
-import meteordevelopment.meteorclient.utils.render.color.RainbowColors;
-import meteordevelopment.meteorclient.utils.render.color.SettingColor;
+import meteordevelopment.meteorclient.utils.misc.NbtUtils;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 public class Friends extends System<Friends> implements Iterable<Friend> {
-    public final Settings settings = new Settings();
-
-    private final SettingGroup sgGeneral = settings.getDefaultGroup();
-
-    public final Setting<SettingColor> color = sgGeneral.add(new ColorSetting.Builder()
-        .name("color")
-        .description("The color used to show friends.")
-        .defaultValue(new SettingColor(0, 255, 180))
-        .build()
-    );
-
-    public final Setting<Boolean> attack = sgGeneral.add(new BoolSetting.Builder()
-        .name("attack")
-        .description("Whether to attack friends.")
-        .defaultValue(false)
-        .build()
-    );
-
     private final List<Friend> friends = new ArrayList<>();
 
     public Friends() {
@@ -51,13 +31,8 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
         return Systems.get(Friends.class);
     }
 
-    @Override
-    public void init() {
-        RainbowColors.add(color.get());
-    }
-
     public boolean add(Friend friend) {
-        if (friend.name.isEmpty()) return false;
+        if (friend.name.isEmpty() || friend.name.contains(" ")) return false;
 
         if (!friends.contains(friend)) {
             friends.add(friend);
@@ -78,9 +53,9 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
         return false;
     }
 
-    public Friend get(UUID uuid) {
+    public Friend get(String name) {
         for (Friend friend : friends) {
-            if (friend.id.equals(uuid)) {
+            if (friend.name.equals(name)) {
                 return friend;
             }
         }
@@ -89,19 +64,31 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
     }
 
     public Friend get(PlayerEntity player) {
-        return get(player.getUuid());
+        return get(player.getEntityName());
+    }
+
+    public Friend get(PlayerListEntry player) {
+        return get(player.getProfile().getName());
     }
 
     public boolean isFriend(PlayerEntity player) {
         return get(player) != null;
     }
 
+    public boolean isFriend(PlayerListEntry player) {
+        return get(player) != null;
+    }
+
     public boolean shouldAttack(PlayerEntity player) {
-        return !isFriend(player) || attack.get();
+        return !isFriend(player);
     }
 
     public int count() {
         return friends.size();
+    }
+
+    public boolean isEmpty() {
+        return friends.isEmpty();
     }
 
     @Override
@@ -112,32 +99,32 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
     @Override
     public NbtCompound toTag() {
         NbtCompound tag = new NbtCompound();
-        NbtList friendsTag = new NbtList();
 
-        for (Friend friend : friends) friendsTag.add(friend.toTag());
-        tag.put("friends", friendsTag);
-
-        tag.put("settings", settings.toTag());
+        tag.put("friends", NbtUtils.listToTag(friends));
 
         return tag;
     }
 
     @Override
     public Friends fromTag(NbtCompound tag) {
-        NbtList friendList = tag.getList("friends", 10);
         friends.clear();
 
-        for (NbtElement friendTag : friendList) {
-            NbtCompound compound = (NbtCompound) friendTag;
-            if (!compound.contains("id")) continue;
+        for (NbtElement itemTag : tag.getList("friends", 10)) {
+            NbtCompound friendTag = (NbtCompound) itemTag;
+            if (!friendTag.contains("name")) continue;
 
-            MeteorExecutor.execute(() -> {
-                Friend friend = new Friend(compound);
-                if (friend.updateName()) friends.add(friend);
-            });
+            String name = friendTag.getString("name");
+            if (get(name) != null) continue;
+
+            String uuid = friendTag.getString("id");
+            Friend friend = !uuid.isBlank()
+                ? new Friend(name, UUIDTypeAdapter.fromString(uuid))
+                : new Friend(name);
+
+            friends.add(friend);
         }
 
-        settings.fromTag(tag.getCompound("settings"));
+        Collections.sort(friends);
 
         return this;
     }

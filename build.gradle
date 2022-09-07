@@ -26,38 +26,38 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-	def library = { id ->
-		implementation(id) { exclude group: "org.slf4j" }
-		shadow(id) { exclude group: "org.slf4j" }
-	}
+configurations {
+    // include mods
+    modImplementation.extendsFrom(modInclude)
+    include.extendsFrom(modInclude)
 
+    // include libraries
+    implementation.extendsFrom(library)
+    shadow.extendsFrom(library)
+}
+
+dependencies {
 	// Fabric
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modInclude fabricApi.module("fabric-resource-loader-v0", project.fapi_version)
 
 	// Compat fixes
-    modCompileOnly fabricApi.module("fabric-renderer-indigo", project.api_version)
+    modCompileOnly fabricApi.module("fabric-renderer-indigo", project.fapi_version)
     modCompileOnly("me.jellysquid.mods:sodium-fabric:${project.sodium_version}") { transitive = false }
-    modCompileOnly("io.vram:canvas-fabric-mc118:1.0.+") { transitive = false }
+    modCompileOnly("io.vram:canvas-fabric-mc119:1.0.+") { transitive = false }
 
-	// Baritone integration
-    modImplementation "baritone:fabric:${project.baritone_version}"
-    include "baritone:fabric:${project.baritone_version}"
+	// Baritone (https://github.com/MeteorDevelopment/baritone)
+    modInclude "baritone:fabric:${project.minecraft_version}-SNAPSHOT"
 
     // Libraries
     library "meteordevelopment:orbit:${project.orbit_version}"
     library "meteordevelopment:starscript:${project.starscript_version}"
     library "meteordevelopment:discord-ipc:${project.discordipc_version}"
     library "org.reflections:reflections:${project.reflections_version}"
-
-    // Proxies
-    implementation("io.netty:netty-handler-proxy:${project.netty_version}") { transitive = false }
-    shadow("io.netty:netty-handler-proxy:${project.netty_version}") { transitive = false }
-
-    implementation("io.netty:netty-codec-socks:${project.netty_version}") { transitive = false }
-    shadow("io.netty:netty-codec-socks:${project.netty_version}") { transitive = false }
+    library("io.netty:netty-handler-proxy:${project.netty_version}") { transitive = false }
+    library("io.netty:netty-codec-socks:${project.netty_version}") { transitive = false }
 
     // Launch sub project
     shadow project(":launch")
@@ -65,6 +65,12 @@ dependencies {
 
 loom {
     accessWidenerPath = file("src/main/resources/meteor-client.accesswidener")
+}
+
+afterEvaluate {
+    migrateMappings.configure {
+        outputDir = project.file("src/main/java")
+    }
 }
 
 shadowJar {
@@ -79,10 +85,6 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding("UTF-8")
-}
-
 jar {
 	from "LICENSE"
 
@@ -93,7 +95,7 @@ jar {
 
 remapJar {
 	dependsOn shadowJar
-	input.set(shadowJar.archiveFile)
+	inputFile.set(shadowJar.archiveFile)
 }
 
 javadoc {
@@ -147,5 +149,3 @@ publishing {
         }
     }
 }
-
-apply from: "scripts/packetutils.gradle"

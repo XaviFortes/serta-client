@@ -1,6 +1,6 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- * Copyright (c) 2022 Meteor Development.
+ * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
+ * Copyright (c) Meteor Development.
  */
 
 package meteordevelopment.meteorclient.systems.hud;
@@ -232,7 +232,7 @@ public class HudRenderer {
     }
 
     private static FontHolder loadFont(int height) {
-        byte[] data = Utils.readBytes(Fonts.RENDERER.fontFace.asStream());
+        byte[] data = Utils.readBytes(Fonts.RENDERER.fontFace.toStream());
         ByteBuffer buffer = BufferUtils.createByteBuffer(data.length).put(data).flip();
 
         return new FontHolder(new Font(buffer, height));
