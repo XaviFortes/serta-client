@@ -1,6 +1,5 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
- * Copyright (c) Meteor Development.
+
  */
 
 package meteordevelopment.meteorclient.systems.modules;
@@ -11,15 +10,17 @@ import net.minecraft.item.Items;
 public class Category {
     public final String name;
     public final ItemStack icon;
+    public final int color;
     private final int nameHash;
 
-    public Category(String name, ItemStack icon) {
+    public Category(String name, ItemStack icon, int color) {
         this.name = name;
         this.nameHash = name.hashCode();
         this.icon = icon == null ? Items.AIR.getDefaultStack() : icon;
+        this.color = color;
     }
-    public Category(String name) {
-        this(name, null);
+    public Category(String name, int color) {
+        this(name, null, color);
     }
 
     @Override

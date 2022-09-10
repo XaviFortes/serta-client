@@ -1,6 +1,5 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
- * Copyright (c) Meteor Development.
+
  */
 
 package meteordevelopment.meteorclient.systems.modules.misc;
@@ -25,7 +24,7 @@ public class MessageAura extends Module {
     private final Setting<String> message = sgGeneral.add(new StringSetting.Builder()
             .name("message")
             .description("The specified message sent to the player.")
-            .defaultValue("Meteor on Crack!")
+            .defaultValue("Serta on Crack!")
             .build()
     );
 

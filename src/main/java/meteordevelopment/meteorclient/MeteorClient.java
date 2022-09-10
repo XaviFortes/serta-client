@@ -1,7 +1,4 @@
-/*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
- * Copyright (c) Meteor Development.
- */
+
 
 package meteordevelopment.meteorclient;
 
@@ -27,6 +24,7 @@ import meteordevelopment.meteorclient.utils.misc.Version;
 import meteordevelopment.meteorclient.utils.misc.input.KeyAction;
 import meteordevelopment.meteorclient.utils.misc.input.KeyBinds;
 import meteordevelopment.meteorclient.utils.network.OnlinePlayers;
+import meteordevelopment.meteorclient.utils.render.color.Color;
 import meteordevelopment.orbit.EventBus;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
@@ -53,6 +51,12 @@ public class MeteorClient implements ClientModInitializer {
     public static MeteorClient INSTANCE;
     public static final IEventBus EVENT_BUS = new EventBus();
     public static final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString(), MOD_ID);
+
+    public final Color SERTA_COLOR = new Color(75, 124, 230, 255);
+    public final int SERTA_COLOR_INT = Color.fromRGBA(SERTA_COLOR.r, SERTA_COLOR.g, SERTA_COLOR.b, SERTA_COLOR.a);
+    public final Color SERTA_BACKGROUND_COLOR = new Color(29, 33, 43, 255);
+    public final int SERTA_BACKGROUND_COLOR_INT = Color.fromRGBA(SERTA_BACKGROUND_COLOR.r, SERTA_BACKGROUND_COLOR.g, SERTA_BACKGROUND_COLOR.b, SERTA_BACKGROUND_COLOR.a);
+
     public static final Logger LOG = LoggerFactory.getLogger("Serta Client");
 
     static {

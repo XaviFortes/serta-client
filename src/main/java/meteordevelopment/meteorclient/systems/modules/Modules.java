@@ -1,6 +1,6 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client).
- * Copyright (c) Meteor Development.
+ * 
+ * 
  */
 
 package meteordevelopment.meteorclient.systems.modules;
@@ -21,6 +21,7 @@ import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.System;
 import meteordevelopment.meteorclient.systems.Systems;
+import meteordevelopment.meteorclient.systems.modules.client.*;
 import meteordevelopment.meteorclient.systems.modules.combat.*;
 import meteordevelopment.meteorclient.systems.modules.misc.*;
 import meteordevelopment.meteorclient.systems.modules.misc.swarm.Swarm;
@@ -89,6 +90,7 @@ public class Modules extends System<Modules> {
         initRender();
         initWorld();
         initMisc();
+        initClient();
     }
 
     @Override
@@ -437,6 +439,7 @@ public class Modules extends System<Modules> {
         add(new Reach());
         add(new Rotation());
         add(new SpeedMine());
+        add(new AutoCraft());
     }
 
     private void initMovement() {
@@ -515,6 +518,7 @@ public class Modules extends System<Modules> {
         add(new Blur());
         add(new PopChams());
         add(new TunnelESP());
+        add(new RideStats());
     }
 
     private void initWorld() {
@@ -565,6 +569,10 @@ public class Modules extends System<Modules> {
         add(new Spam());
         add(new ServerSpoof());
         add(new InventoryTweaks());
+    }
+
+    private void initClient() {
+        add(new ClientSpoof());
     }
 
     public static class ModuleRegistry extends Registry<Module> {
