@@ -10,6 +10,7 @@
 <div align="center">
     <a href="https://discord.gg/WuvxTSK"><img src="https://img.shields.io/discord/457245975963107331?logo=discord" alt="Discord"/></a>
     <br>
+    <a href="https://wakatime.com/badge/github/XaviFortes/serta-client"><img src="https://wakatime.com/badge/github/XaviFortes/serta-client.svg" alt="wakatime"></a>
     <img src="https://img.shields.io/github/last-commit/XaviFortes/serta-client" alt="GitHub last commit"/>
     <img src="https://img.shields.io/github/commit-activity/w/XaviFortes/serta-client" alt="GitHub commit activity"/>
     <img src="https://img.shields.io/github/contributors/XaviFortes/serta-client" alt="GitHub contributors"/>
@@ -42,7 +43,7 @@ Bug reports and suggestions should be made in this repo's [issue tracker](https:
 Please provide as much information as you can to best help us understand your issue and give a better chance of it being resolved.
 
 ## Credits
-MeteorDevelopment for the fork of [Meteor-Client](https://github.com/MeteorDevelopment/meteor-client)
+MeteorDevelopment for the fork of [Meteor-Client](https://github.com/MeteorDevelopment/meteor-client)  
 [Cabaletta](https://github.com/cabaletta) and [WagYourTail](https://github.com/wagyourtail) for [Baritone](https://github.com/cabaletta/baritone)  
 The [Fabric Team](https://github.com/FabricMC) for [Fabric](https://github.com/FabricMC/fabric-loader) and [Yarn](https://github.com/FabricMC/yarn)  
 [Mathax Client](https://github.com/MatHax/Client) for some modules
