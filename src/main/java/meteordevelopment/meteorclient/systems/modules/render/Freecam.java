@@ -100,6 +100,13 @@ public class Freecam extends Module {
         .build()
     );
 
+    private final Setting<Boolean> staticView = sgGeneral.add(new BoolSetting.Builder()
+        .name("static")
+        .description("Disables settings that move the view.")
+        .defaultValue(true)
+        .build()
+    );
+
     public final Vec3 pos = new Vec3();
     public final Vec3 prevPos = new Vec3();
 
@@ -110,6 +117,7 @@ public class Freecam extends Module {
     public float prevYaw, prevPitch;
 
     private double fovScale;
+    private boolean bobView;
 
     private boolean forward, backward, right, left, up, down;
 
@@ -120,7 +128,11 @@ public class Freecam extends Module {
     @Override
     public void onActivate() {
         fovScale = mc.options.getFovEffectScale().getValue();
-        mc.options.getFovEffectScale().setValue((double)0);
+        bobView = mc.options.getBobView().getValue();
+        if (staticView.get()) {
+            mc.options.getFovEffectScale().setValue((double)0);
+            mc.options.getBobView().setValue(false);
+        }
         yaw = mc.player.getYaw();
         pitch = mc.player.getPitch();
 
@@ -148,7 +160,10 @@ public class Freecam extends Module {
     public void onDeactivate() {
         if (reloadChunks.get()) mc.worldRenderer.reload();
         mc.options.setPerspective(perspective);
-        mc.options.getFovEffectScale().setValue((double)fovScale);
+        if (staticView.get()) {
+            mc.options.getFovEffectScale().setValue((double)fovScale);
+            mc.options.getBobView().setValue(bobView);
+        }
     }
 
     @EventHandler
