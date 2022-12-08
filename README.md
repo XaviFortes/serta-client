@@ -15,9 +15,8 @@
     <img src="https://img.shields.io/github/commit-activity/w/XaviFortes/serta-client" alt="GitHub commit activity"/>
     <img src="https://img.shields.io/github/contributors/XaviFortes/serta-client" alt="GitHub contributors"/>
     <br>
-    <img src="https://img.shields.io/github/languages/code-size/XaviFortes/serta-client" alt="GitHub code size in bytes"/>
-    <img src="https://tokei.rs/b1/github/XaviFortes/serta-client" alt="GitHub lines of code"/>
-    <img src="https://www.codefactor.io/repository/github/XaviFortes/serta-client/badge" alt="CodeFactor"/>
+    <img src="https://img.shields.io/github/languages/code-size/MeteorDevelopment/meteor-client" alt="GitHub code size in bytes"/>
+    <img src="https://tokei.rs/b1/github/MeteorDevelopment/meteor-client" alt="GitHub lines of code"/>
 </div>
 
 ## Usage

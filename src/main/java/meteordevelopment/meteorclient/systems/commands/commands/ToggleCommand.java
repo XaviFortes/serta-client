@@ -46,6 +46,7 @@ public class ToggleCommand extends Command {
                 .executes(context -> {
                     Module m = ModuleArgumentType.get(context);
                     m.toggle();
+                    m.sendToggledMsg();
                     return SINGLE_SUCCESS;
                 })
                 .then(literal("on")
