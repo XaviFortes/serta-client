@@ -171,10 +171,10 @@ public class NoRender extends Module {
     );
 
     private final Setting<Boolean> noBlindness = sgWorld.add(new BoolSetting.Builder()
-    .name("blindness")
-    .description("Disables rendering of blindness.")
-    .defaultValue(false)
-    .build()
+        .name("blindness")
+        .description("Disables rendering of blindness.")
+        .defaultValue(false)
+        .build()
     );
 
     private final Setting<Boolean> noDarkness = sgWorld.add(new BoolSetting.Builder()
@@ -222,6 +222,13 @@ public class NoRender extends Module {
     private final Setting<Boolean> noSkylightUpdates = sgWorld.add(new BoolSetting.Builder()
         .name("skylight-updates")
         .description("Disables rendering of skylight updates.")
+        .defaultValue(false)
+        .build()
+    );
+
+    private final Setting<Boolean> noBeaconBeams = sgWorld.add(new BoolSetting.Builder()
+        .name("beacon-beams")
+        .description("Disables rendering of beacon beams.")
         .defaultValue(false)
         .build()
     );
@@ -279,6 +286,13 @@ public class NoRender extends Module {
     private final Setting<Object2BooleanMap<EntityType<?>>> entities = sgEntity.add(new EntityTypeListSetting.Builder()
         .name("entities")
         .description("Disables rendering of selected entities.")
+        .build()
+    );
+
+    private final Setting<Boolean> dropSpawnPacket = sgEntity.add(new BoolSetting.Builder()
+        .name("drop-spawn-packets")
+        .description("WARNING! Drops all spawn packets of entities selected in the above list.")
+        .defaultValue(false)
         .build()
     );
 
@@ -446,6 +460,10 @@ public class NoRender extends Module {
         return isActive() && noSkylightUpdates.get();
     }
 
+    public boolean noBeaconBeams() {
+        return isActive() && noBeaconBeams.get();
+    }
+
     public boolean noFallingBlocks() {
         return isActive() && noFallingBlocks.get();
     }
@@ -483,6 +501,14 @@ public class NoRender extends Module {
 
     public boolean noEntity(Entity entity) {
         return isActive() && entities.get().getBoolean(entity.getType());
+    }
+
+    public boolean noEntity(EntityType<?> entity) {
+        return isActive() && entities.get().getBoolean(entity);
+    }
+
+    public boolean getDropSpawnPacket() {
+        return isActive() && dropSpawnPacket.get();
     }
 
     public boolean noArmor() {

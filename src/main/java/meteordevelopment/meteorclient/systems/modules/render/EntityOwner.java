@@ -14,7 +14,7 @@ import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Module;
-import meteordevelopment.meteorclient.utils.misc.Vec3;
+import meteordevelopment.meteorclient.utils.Utils;
 import meteordevelopment.meteorclient.utils.network.Http;
 import meteordevelopment.meteorclient.utils.network.MeteorExecutor;
 import meteordevelopment.meteorclient.utils.render.NametagUtils;
@@ -25,6 +25,7 @@ import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import org.joml.Vector3d;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class EntityOwner extends Module {
             .build()
     );
 
-    private final Vec3 pos = new Vec3();
+    private final Vector3d pos = new Vector3d();
     private final Map<UUID, String> uuidToName = new HashMap<>();
 
     public EntityOwner() {
@@ -74,7 +75,7 @@ public class EntityOwner extends Module {
             else continue;
 
             if (ownerUuid != null) {
-                pos.set(entity, event.tickDelta);
+                Utils.set(pos, entity, event.tickDelta);
                 pos.add(0, entity.getEyeHeight(entity.getPose()) + 0.75, 0);
 
                 if (NametagUtils.to2D(pos, scale.get())) {

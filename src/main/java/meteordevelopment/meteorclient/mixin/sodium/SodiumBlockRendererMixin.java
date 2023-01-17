@@ -42,7 +42,7 @@ public class SodiumBlockRendererMixin {
     private void onRenderModel(BlockRenderView world, BlockState state, BlockPos pos, BlockPos origin, BakedModel model, ChunkModelBuilder buffers, boolean cull, long seed, CallbackInfoReturnable<Boolean> info) {
         int alpha = Xray.getAlpha(state, pos);
 
-        if (alpha == 0) info.cancel();
+        if (alpha == 0) info.setReturnValue(false);
         else alphas.set(alpha);
     }
 

@@ -8,6 +8,7 @@ import com.mojang.util.UUIDTypeAdapter;
 import meteordevelopment.meteorclient.systems.System;
 import meteordevelopment.meteorclient.systems.Systems;
 import meteordevelopment.meteorclient.utils.misc.NbtUtils;
+import meteordevelopment.meteorclient.utils.network.MeteorExecutor;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -124,6 +125,8 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
         }
 
         Collections.sort(friends);
+
+        MeteorExecutor.execute(() -> friends.forEach(Friend::updateInfo));
 
         return this;
     }

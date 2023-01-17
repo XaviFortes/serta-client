@@ -159,7 +159,7 @@ public class SpawnProofer extends Module {
     }
 
     private boolean isNonOpaqueBlock(Block block) {
-        return block instanceof AbstractButtonBlock ||
+        return block instanceof ButtonBlock ||
             block instanceof SlabBlock ||
             block instanceof AbstractPressurePlateBlock ||
             block instanceof TransparentBlock ||

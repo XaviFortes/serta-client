@@ -4,6 +4,7 @@
 
 package meteordevelopment.meteorclient.systems.modules.world;
 
+import meteordevelopment.meteorclient.events.entity.player.BlockBreakingCooldownEvent;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.renderer.ShapeMode;
@@ -17,6 +18,7 @@ import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import meteordevelopment.meteorclient.utils.world.BlockIterator;
 import meteordevelopment.meteorclient.utils.world.BlockUtils;
 import meteordevelopment.orbit.EventHandler;
+import meteordevelopment.orbit.EventPriority;
 import net.minecraft.block.Block;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.util.Hand;
@@ -417,6 +419,11 @@ public class Nuker extends Module {
             for (BlockPos.Mutable blockPos : blocks) blockPosPool.free(blockPos);
             blocks.clear();
         });
+    }
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onBlockBreakingCooldown(BlockBreakingCooldownEvent event) {
+        event.cooldown = 0;
     }
 
     public enum ListMode {

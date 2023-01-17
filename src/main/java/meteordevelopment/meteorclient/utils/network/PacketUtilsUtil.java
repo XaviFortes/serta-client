@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class PacketUtilsUtil {
     private static final String packetRegistryClass = """
-    private static class PacketRegistry extends Registry<Class<? extends Packet<?>>> {
+    private static class PacketRegistry extends SimpleRegistry<Class<? extends Packet<?>>> {
         public PacketRegistry() {
             super(RegistryKey.ofRegistry(new MeteorIdentifier("packets")), Lifecycle.stable());
         }
@@ -93,7 +93,7 @@ public class PacketUtilsUtil {
         }
 
         @Override
-        public Optional<RegistryEntry<Class<? extends Packet<?>>>> getRandom(Random random) {
+        public Optional<RegistryEntry.Reference<Class<? extends Packet<?>>>> getRandom(Random random) {
             return Optional.empty();
         }
 
@@ -103,22 +103,17 @@ public class PacketUtilsUtil {
         }
 
         @Override
-        public RegistryEntry<Class<? extends Packet<?>>> getOrCreateEntry(RegistryKey<Class<? extends Packet<?>>> key) {
-            return null;
-        }
-
-        @Override
         public RegistryEntry.Reference<Class<? extends Packet<?>>> createEntry(Class<? extends Packet<?>> value) {
             return null;
         }
 
         @Override
-        public Optional<RegistryEntry<Class<? extends Packet<?>>>> getEntry(int rawId) {
+        public Optional<RegistryEntry.Reference<Class<? extends Packet<?>>>> getEntry(int rawId) {
             return Optional.empty();
         }
 
         @Override
-        public Optional<RegistryEntry<Class<? extends Packet<?>>>> getEntry(RegistryKey<Class<? extends Packet<?>>> key) {
+        public Optional<RegistryEntry.Reference<Class<? extends Packet<?>>>> getEntry(RegistryKey<Class<? extends Packet<?>>> key) {
             return Optional.empty();
         }
 
@@ -148,20 +143,10 @@ public class PacketUtilsUtil {
         }
 
         @Override
-        public boolean containsTag(TagKey<Class<? extends Packet<?>>> tag) {
-            return false;
-        }
-
-        @Override
         public void clearTags() {}
 
         @Override
         public void populateTags(Map<TagKey<Class<? extends Packet<?>>>, List<RegistryEntry<Class<? extends Packet<?>>>>> tagEntries) {}
-
-        @Override
-        public DataResult<RegistryEntry<Class<? extends Packet<?>>>> getOrCreateEntryDataResult(RegistryKey<Class<? extends Packet<?>>> key) {
-            return null;
-        }
 
         @Override
         public Set<RegistryKey<Class<? extends Packet<?>>>> getKeys() {
@@ -170,10 +155,18 @@ public class PacketUtilsUtil {
     }
 """;
 
-//    @PostInit
+    public static void main(String[] args) {
+        try {
+            init();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void init() throws IOException {
         // Generate PacketUtils.java
-        File file = new File(System.getProperty("user.dir") + "/PacketUtils.java");
+        File file = new File("src/main/java/" + PacketUtilsUtil.class.getPackageName().replace('.', '/') + "/PacketUtils.java");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
@@ -194,15 +187,16 @@ public class PacketUtilsUtil {
         writer.write("import com.mojang.serialization.Lifecycle;\n");
         writer.write("import meteordevelopment.meteorclient.utils.misc.MeteorIdentifier;\n");
         writer.write("import net.minecraft.network.Packet;\n");
-        writer.write("import net.minecraft.tag.TagKey;\n");
+        writer.write("import net.minecraft.registry.Registry;\n");
+        writer.write("import net.minecraft.registry.RegistryKey;\n");
+        writer.write("import net.minecraft.registry.SimpleRegistry;\n");
+        writer.write("import net.minecraft.registry.entry.RegistryEntry;\n");
+        writer.write("import net.minecraft.registry.entry.RegistryEntryList;\n");
+        writer.write("import net.minecraft.registry.tag.TagKey;\n");
         writer.write("import net.minecraft.util.Identifier;\n");
-        writer.write("import net.minecraft.util.registry.Registry;\n");
-        writer.write("import net.minecraft.util.registry.RegistryEntry;\n");
-        writer.write("import net.minecraft.util.registry.RegistryEntryList;\n");
-        writer.write("import net.minecraft.util.registry.RegistryKey;\n");
-        writer.write("import org.jetbrains.annotations.NotNull;\n");
         writer.write("import net.minecraft.util.math.random.Random;\n");
-        writer.write("import com.mojang.serialization.DataResult;\n");
+        writer.write("import org.jetbrains.annotations.NotNull;\n");
+
         writer.write("import java.util.*;\n");
         writer.write("import java.util.stream.Stream;\n");
 

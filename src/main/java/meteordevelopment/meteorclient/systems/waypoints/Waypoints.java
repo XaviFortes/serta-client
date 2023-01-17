@@ -16,7 +16,6 @@ import meteordevelopment.meteorclient.systems.modules.render.WaypointsModule;
 import meteordevelopment.meteorclient.utils.Utils;
 import meteordevelopment.meteorclient.utils.files.StreamUtils;
 import meteordevelopment.meteorclient.utils.misc.NbtUtils;
-import meteordevelopment.meteorclient.utils.misc.Vec3;
 import meteordevelopment.meteorclient.utils.player.PlayerUtils;
 import meteordevelopment.meteorclient.utils.render.NametagUtils;
 import meteordevelopment.meteorclient.utils.render.color.Color;
@@ -28,6 +27,7 @@ import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import org.joml.Vector3d;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,7 +132,7 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
         if (!module.isActive()) return;
 
         TextRenderer text = TextRenderer.get();
-        Vec3 center = new Vec3(mc.getWindow().getFramebufferWidth() / 2.0, mc.getWindow().getFramebufferHeight() / 2.0, 0);
+        Vector3d center = new Vector3d(mc.getWindow().getFramebufferWidth() / 2.0, mc.getWindow().getFramebufferHeight() / 2.0, 0);
         int textRenderDist = module.textRenderDistance.get();
 
         for (Waypoint waypoint : this) {
@@ -141,7 +141,7 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
 
             // Calculate distance
             BlockPos blockPos = waypoint.getPos();
-            Vec3 pos = new Vec3(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
+            Vector3d pos = new Vector3d(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
             double dist = PlayerUtils.distanceToCamera(pos.x, pos.y, pos.z);
 
             // Continue if this waypoint should not be rendered
@@ -149,7 +149,7 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
             if (!NametagUtils.to2D(pos, 1)) continue;
 
             // Calculate alpha and distance to center of the screen
-            double distToCenter = pos.distanceTo(center);
+            double distToCenter = pos.distance(center);
             double a = 1;
 
             if (dist < 20) {

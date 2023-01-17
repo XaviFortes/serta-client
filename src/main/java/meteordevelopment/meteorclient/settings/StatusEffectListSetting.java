@@ -9,8 +9,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
 
         try {
             for (String value : values) {
-                StatusEffect effect = parseId(Registry.STATUS_EFFECT, value);
+                StatusEffect effect = parseId(Registries.STATUS_EFFECT, value);
                 if (effect != null) effects.add(effect);
             }
         } catch (Exception ignored) {}
@@ -49,7 +49,7 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.STATUS_EFFECT.getIds();
+        return Registries.STATUS_EFFECT.getIds();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
         NbtList valueTag = new NbtList();
 
         for (StatusEffect effect : get()) {
-            Identifier id = Registry.STATUS_EFFECT.getId(effect);
+            Identifier id = Registries.STATUS_EFFECT.getId(effect);
             if (id != null) valueTag.add(NbtString.of(id.toString()));
         }
         tag.put("value", valueTag);
@@ -71,7 +71,7 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
 
         NbtList valueTag = tag.getList("value", 8);
         for (NbtElement tagI : valueTag) {
-            StatusEffect effect = Registry.STATUS_EFFECT.get(new Identifier(tagI.asString()));
+            StatusEffect effect = Registries.STATUS_EFFECT.get(new Identifier(tagI.asString()));
             if (effect != null) get().add(effect);
         }
 

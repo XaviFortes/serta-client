@@ -8,9 +8,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class SoundEventListSetting extends Setting<List<SoundEvent>> {
 
         try {
             for (String value : values) {
-                SoundEvent sound = parseId(Registry.SOUND_EVENT, value);
+                SoundEvent sound = parseId(Registries.SOUND_EVENT, value);
                 if (sound != null) sounds.add(sound);
             }
         } catch (Exception ignored) {}
@@ -49,14 +49,14 @@ public class SoundEventListSetting extends Setting<List<SoundEvent>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.SOUND_EVENT.getIds();
+        return Registries.SOUND_EVENT.getIds();
     }
 
     @Override
     public NbtCompound save(NbtCompound tag) {
         NbtList valueTag = new NbtList();
         for (SoundEvent sound : get()) {
-            Identifier id = Registry.SOUND_EVENT.getId(sound);
+            Identifier id = Registries.SOUND_EVENT.getId(sound);
             if (id != null) valueTag.add(NbtString.of(id.toString()));
         }
         tag.put("value", valueTag);
@@ -70,7 +70,7 @@ public class SoundEventListSetting extends Setting<List<SoundEvent>> {
 
         NbtList valueTag = tag.getList("value", 8);
         for (NbtElement tagI : valueTag) {
-            SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(tagI.asString()));
+            SoundEvent soundEvent = Registries.SOUND_EVENT.get(new Identifier(tagI.asString()));
             if (soundEvent != null) get().add(soundEvent);
         }
 
